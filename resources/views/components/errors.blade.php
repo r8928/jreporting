@@ -7,3 +7,7 @@
 @if (session()->has('success'))
     <small class="text-success d-block">{{ session('success') }}</small>
 @endif
+
+@if (session()->has('error'))
+    <small class="text-danger d-block">{{ session('error') }}</small>
+@endif

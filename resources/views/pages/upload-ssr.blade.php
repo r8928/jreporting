@@ -10,7 +10,7 @@
                 <div class="card">
                     <div class="card-header pb-0">
                         <div class="d-flex align-items-center">
-                            <p class="mb-0">{{ $page_title }}</p>
+                            <h4 class="mb-0">{{ $page_title }}</h4>
                         </div>
                     </div>
                     {{-- @if (request()->isMethod('POST')) --}}
@@ -27,12 +27,18 @@
                                 <div>
                                     <label class="d-block">Select a CSV file to upload</label>
                                     <input type="file" name="file" required>
-                                    <x-errors></x-errors>
                                 </div>
+
+                                <div class="form-group">
+                                    <label for="example-text-input" class="form-control-label">Balanes as at</label>
+                                    <input class="form-control" type="date" />
+                                </div>
+                                <x-errors></x-errors>
                             </div>
 
+
                             <button type="submit" class="d-inline-block btn bg-gradient-dark ms-6 mt-3 mb-0"">
-                                <i class="ni ni-cloud-upload-96" aria-hidden="true"></i> Upload</button>
+                                <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i> Upload</button>
                         </form>
                     </div>
                 </div>

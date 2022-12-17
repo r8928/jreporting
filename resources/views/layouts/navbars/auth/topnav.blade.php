@@ -12,23 +12,24 @@
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
             <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-                <div class="input-group">
+                {{-- <div class="input-group">
                     <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
                     <input type="text" class="form-control" placeholder="Type here...">
-                </div>
+                </div> --}}
             </div>
             <ul class="navbar-nav  justify-content-end">
-                {{-- <li class="nav-item d-flex align-items-center">
-                    <form role="form" method="post" action="{{ route('logout') }}" id="logout-form">
-                        @csrf
-                        <a href="{{ route('logout') }}"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                            class="nav-link text-white font-weight-bold px-0">
-                            <i class="fa fa-user me-sm-1"></i>
-                            <span class="d-sm-inline d-none">Log out</span>
+                <li class="nav-item d-flex align-items-center">
+                    @if (auth()->check())
+                        <a class="nav-link text-white font-weight-bold px-0 me-3">
+                            <span class="d-sm-inline d-none">Hello, {{ auth()->user()->firstname }}
+                                {{ auth()->user()->lastname }}</span>
                         </a>
-                    </form>
-                </li> --}}
+                    @endif
+                    <a href="{{ route('logout') }}" class="nav-link text-white font-weight-bold px-0">
+                        <i class="fa fa-user me-sm-1"></i>
+                        <span class="d-sm-inline d-none">Log out</span>
+                    </a>
+                </li>
                 <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
                     <a href="javascript:;" class="nav-link text-white p-0" id="iconNavbarSidenav">
                         <div class="sidenav-toggler-inner">

@@ -306,7 +306,7 @@
             > .nav-item {
                 .nav-link {
                     &.active {
-                        background-color: #f6f9fc;
+                        background-color: $secondary;
                         box-shadow: none;
                     }
                 }
@@ -321,8 +321,8 @@
     }
 
     .navbar-nav > .nav-item .nav-link.active {
-        color: $dark;
-        background-color: $dark-sidebar-nav-active-bg;
+        color: $light;
+        background-color: $secondary;
     }
 }
 

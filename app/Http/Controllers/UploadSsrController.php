@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Config;
 use App\Models\SsrReport;
 use App\Models\UploadSsr;
 use Illuminate\Http\Request;
@@ -16,9 +17,19 @@ class UploadSsrController extends Controller
 
     public function upload()
     {
+        $config_columns = Config::getItem('ssr_columns_sequence');
+
         $mimes = 'csv,txt';
-        $expected_columns = 11;
-        $first_column = 'department';
+        $expected_columns = sizeof($config_columns);
+        $first_column = $config_columns[0];
+        $number_cols = [
+            'center',
+            'north',
+            'south',
+            'huawei',
+            'zte',
+            'ericsson',
+        ];
 
         request()->validate([
             'file' => 'required|mimes:' . $mimes,
@@ -43,6 +54,16 @@ class UploadSsrController extends Controller
             throw ValidationException::withMessages([$error]);
         }
 
+        if (strtolower($data[0][0]) != $first_column) {
+            $error = 'Wrong SSR file format. First column of first row should be ' . $first_column;
+
+            UploadSsr::create([
+                'user_id' => auth()->id(),
+                'description' => $error
+            ]);
+            throw ValidationException::withMessages([$error]);
+        }
+
         try {
             \DB::beginTransaction();
             SsrReport::whereRaw(true)->delete();
@@ -50,20 +71,15 @@ class UploadSsrController extends Controller
             foreach ($data as $row) {
                 if (strtolower($row[0]) != $first_column) {
                     $i = 0;
+                    foreach ($config_columns as $col) {
+                        if (in_array($col, $number_cols)) {
+                            $create[$col] = str_replace(',', '', $row[$i++]);
+                        } else {
+                            $create[$col] = $row[$i++];
+                        }
+                    }
 
-                    SsrReport::create([
-                        'department' => $row[$i++],
-                        'condition' => $row[$i++],
-                        'supplier' => $row[$i++],
-                        'item_code' => $row[$i++],
-                        'description' => $row[$i++],
-                        'category' => $row[$i++],
-                        'uom' => $row[$i++],
-                        'center' => str_replace(',', '', $row[$i++]),
-                        'north' => str_replace(',', '', $row[$i++]),
-                        'south' => str_replace(',', '', $row[$i++]),
-                        'total' => str_replace(',', '', $row[$i++]),
-                    ]);
+                    SsrReport::create($create);
                 }
             }
 
